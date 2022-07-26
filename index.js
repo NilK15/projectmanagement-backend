@@ -1,4 +1,5 @@
-//middle ware api
+
+//middle ware api to do stuff to the body
 var bodyParser = require('body-parser')
 const express = require('express')
 //Express instance
