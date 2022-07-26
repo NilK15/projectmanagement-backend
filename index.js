@@ -42,3 +42,10 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+
+//TODO - convert project strings to object arrays
+//Add properties, at the very least with ID and Name
+//Convert endpoint functions to deal with array of objects instead of strings
+//edit postman post body to work with objects
+//add update endpoint
