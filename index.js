@@ -23,8 +23,8 @@ function Project(id, projectName, manager, author) {
     this.author = author;
 }
 
-const project1 = new Project(1, "project1", "Clint", "Build something right for once")
-const project2 = new Project(2, "project2", "Nil", "Nilio")
+const project1 = new Project(1, "project1", "Clint", "Cass")
+const project2 = new Project(2, "project2", "Nil", "Chris")
 
 const project = [project1, project2]
 
