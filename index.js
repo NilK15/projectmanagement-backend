@@ -82,4 +82,4 @@ app.listen(port, () => {
 //Add properties, at the very least with ID and Name - Done
 //Convert endpoint functions to deal with array of objects instead of strings - Done
 //edit postman post body to work with objects - Done
-//add update endpoint
+//add update endpoint - done
