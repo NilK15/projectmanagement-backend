@@ -16,11 +16,13 @@ app.use(bodyParser.json())
 //changing projects to object projects
 // const project = ["project1", "project2"]
 
-function Project(id, projectName, manager, author) {
-    this.id = id;
-    this.projectName = projectName;
-    this.manager = manager;
-    this.author = author;
+class Project {
+    constructor(id, projectName, manager, author) {
+        this.id = id;
+        this.projectName = projectName;
+        this.manager = manager;
+        this.author = author;
+    }
 }
 
 const project1 = new Project(1, "project1", "Clint", "Cass")
