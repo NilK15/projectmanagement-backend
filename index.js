@@ -38,14 +38,14 @@ app.get('/project', (req, res) => {
 
 app.post('/project', (req, res) => {
     var body = req.body;
-    console.log("what it dew")
     project.push(body)
+    console.log("POSTED")
     res.send(project)
 })
 
 app.delete('/project/:id', (req, res) => {
     const { id } = req.params;
-    // console.log(projectIndex)
+    console.log("DELETED")
     project.splice(id, 1)
     res.send(project)
 })
@@ -53,14 +53,33 @@ app.delete('/project/:id', (req, res) => {
 app.get('/', (req, res) => {
     res.send('Hello World!')
 })
+
+// update method to update another existing object's author - is it possible to submit several put requests such as author/name or just author, or just name for one put method or will each one of those require a new put method (one for each attribute)?
+app.put('/project/:id/:author', (req, res) => {
+
+    // grabs and sets id/author as variable
+    const { id } = req.params;
+    const { author } = req.params;
+
+    project.forEach(element => {
+        if (element.id == id) {
+            element.author = author;
+            res.send("Updated Project Id: " + id + "\n Author Updated To: " + author);
+        }
+        else {
+            res.send("No project to update")
+        }
+    });
+
+})
 app.listen(port, () => {
 
     console.log("Starting server on port: " + port)
 })
 
 
-//TODO - convert project strings to object arrays
-//Add properties, at the very least with ID and Name
-//Convert endpoint functions to deal with array of objects instead of strings
-//edit postman post body to work with objects
+//TODO - convert project strings to object arrays - Done
+//Add properties, at the very least with ID and Name - Done
+//Convert endpoint functions to deal with array of objects instead of strings - Done
+//edit postman post body to work with objects - Done
 //add update endpoint
