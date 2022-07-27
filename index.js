@@ -57,29 +57,51 @@ app.get('/', (req, res) => {
 })
 
 // update method to update another existing object's author - is it possible to submit several put requests such as author/name or just author, or just name for one put method or will each one of those require a new put method (one for each attribute)?
-app.put('/project/:id/:author', (req, res) => {
+//
+//
+// older version (will require manually adding props)
+// app.put('/project/:id', (req, res) => {
+
+//     // grabs and sets id/author as variable
+//     const { id } = req.params;
+//     const body = req.body;
+
+//     project.forEach(element => {
+//         if (element.id == id) {
+//             element.author = body.author;
+//             res.send(`Updated Project Id: ${id} \n Author Updated To: ${body.author}`);
+//         }
+//     });
+//     res.send("No project to update")
+// })
+
+// app.listen(port, () => {
+
+//     console.log("Starting server on port: " + port)
+// })
+
+
+app.put('/project/:id', (req, res) => {
 
     // grabs and sets id/author as variable
     const { id } = req.params;
-    const { author } = req.params;
+    const body = req.body;
 
     project.forEach(element => {
         if (element.id == id) {
-            element.author = author;
-            res.send("Updated Project Id: " + id + "\n Author Updated To: " + author);
-        }
-        else {
-            res.send("No project to update")
+            const newElement = { ...element, ...body }
+            //This is changing the actual value of the current elemnt as opposed to using element = req.body, which was more of a reference. Can also use element dot notation such as element.author to change the value which will change at memory loaction also similarly to Object.assign()
+            Object.assign(element, newElement)
+            res.send(`Updated Project Id: ${id} \n Author Updated To: ${body.author}`);
         }
     });
-
+    res.send("No project to update")
 })
+
 app.listen(port, () => {
 
     console.log("Starting server on port: " + port)
 })
-
-
 //TODO - convert project strings to object arrays - Done
 //Add properties, at the very least with ID and Name - Done
 //Convert endpoint functions to deal with array of objects instead of strings - Done
