@@ -1,7 +1,7 @@
-// Middle ware api to do stuff to the body
+
 const bodyParser = require('body-parser')
 const express = require('express')
-const projectRoutes = require('./api/routes/projects')
+const projectRoutes = require('./api/routes/projects.js')
 
 
 // Express instance
