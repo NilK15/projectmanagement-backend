@@ -1,12 +1,12 @@
-// import Project from '../models/project.models'
-const express = require('express');
 const Project = require('../models/project.models.js')
+const express = require('express')
+const Router = express.Router()
 
-const project1 = new Project(1, "project1", "Clint", "Cass", "https://github.com/NilK15/projectmanagement-backend", ["javascript", "nodejs", "react"], "Project applicatiooone")
-const project2 = new Project(2, "project2", "Nil", "Chris", "https://github.com/NilK15/projectmanagement-backend", ["javascript", "nodejs", "react"], "Project applicatiooone")
-const project = [project1, project2]
+// const project1 = new Project(1, "project1", "Clint", "Cass", "https://github.com/NilK15/projectmanagement-backend", ["javascript", "nodejs", "react"], "Project applicatiooone")
+// const project2 = new Project(2, "project2", "Nil", "Chris", "https://github.com/NilK15/projectmanagement-backend", ["javascript", "nodejs", "react"], "Project applicatiooone")
+const project3 = new Project(3, "project3", "Nil", "Clint", "www.yahoo.com", "string", "description" )
+const project = [project3]
 
-const Router = express.Router();
 
 // This is a server, handling requests and based on those request message, we send certain data matching the data request
 // Think of creating api requests - similar to twitter getting data requests like tweets.
@@ -35,7 +35,6 @@ Router.put('/', (req, res) => {
     // grabs and sets id/author as variable
     const { id } = req.params;
     const body = req.body;
-
     project.forEach(element => {
         if (element.id == id) {
             const newElement = { ...element, ...body }
