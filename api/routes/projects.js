@@ -2,11 +2,15 @@ const Project = require('../models/project.models.js')
 const express = require('express')
 const Router = express.Router()
 
-// const project1 = new Project(1, "project1", "Clint", "Cass", "https://github.com/NilK15/projectmanagement-backend", ["javascript", "nodejs", "react"], "Project applicatiooone")
-// const project2 = new Project(2, "project2", "Nil", "Chris", "https://github.com/NilK15/projectmanagement-backend", ["javascript", "nodejs", "react"], "Project applicatiooone")
-const project3 = new Project(3, "project3", "Nil", "Clint", "www.yahoo.com", "string", "description" )
-const project = [project3]
-
+const project1 = new Project(1, "project1", "Clint", "Cass",
+    "https://github.com/NilK15/projectmanagement-backend", ["javascript",
+    "nodejs", "react"], "Project applicatiooone")
+const project2 = new Project(2, "project2", "Nil", "Chris",
+    "https://github.com/NilK15/projectmanagement-backend", ["javascript",
+    "nodejs", "react"], "Project applicatiooone")
+const project3 = new Project(3, "project3", "Nil", "Clint", "www.yahoo.com",
+    "string", "description")
+const project = [project1, project2, project3]
 
 // This is a server, handling requests and based on those request message, we send certain data matching the data request
 // Think of creating api requests - similar to twitter getting data requests like tweets.
@@ -23,15 +27,19 @@ Router.post('/', (req, res) => {
     res.send(project)
 })
 
-Router.delete('/', (req, res) => {
+Router.delete('/:id', (req, res) => {
     const { id } = req.params;
     console.log("DELETED")
-    project.splice(id, 1)
+    let aproject = project.filter(element => element.id != id)
+    for (let i = 0; i < project.length; i++) {
+        project.pop();
+    }
+    Object.assign(project, aproject)
     res.send(project)
 })
 
 // Update method to update Project attributes
-Router.put('/', (req, res) => {
+Router.put('/:id', (req, res) => {
     // grabs and sets id/author as variable
     const { id } = req.params;
     const body = req.body;

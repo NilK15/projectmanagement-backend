@@ -12,12 +12,10 @@ const port = 3000
 // Parse application/json
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-
 app.use('/projects', projectRoutes);
 
 
 // Starts server to listen for requests
 app.listen(port, () => {
-
     console.log("Starting server on port: " + port)
 })
