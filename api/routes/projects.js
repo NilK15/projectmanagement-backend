@@ -2,6 +2,8 @@ const Project = require('../models/project.models.js')
 const express = require('express')
 const Router = express.Router()
 
+
+//hard coded placeholder project object information
 const project1 = new Project(1, "project1", "Clint", "Cass",
     "https://github.com/NilK15/projectmanagement-backend", ["javascript",
     "nodejs", "react"], "Project applicatiooone")
