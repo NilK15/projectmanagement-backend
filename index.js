@@ -13,8 +13,8 @@ app.use(morgan('dev'))
 
 // Middle ware (stuff done before it gets to last portion of its journey)
 // Parse application/json
-app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 // Routes to projects.js domain
 app.use('/projects', projectRoutes);
@@ -35,8 +35,6 @@ app.use((error, req, res, next) => {
         }
     })
 })
-
-
 
 // Starts server to listen for requests
 app.listen(port, () => {

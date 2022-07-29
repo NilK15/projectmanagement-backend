@@ -19,25 +19,45 @@ const project = [project1, project2, project3]
 
 // These are endpoints - similar to little areas of information for people to retrieve informatio (like an API)
 Router.get('/', (req, res) => {
+    // can't have this and send - need to look into why
+    // res.status(200).json({
+    //     message: "successful"
+    // })
     res.send(project)
 })
 
 Router.post('/', (req, res) => {
     var body = req.body;
-    project.push(body)
-    console.log("POSTED")
-    res.send(project)
+    project.push(body);
+    console.log("POSTED");
+    res.send(project);
 })
 
-Router.delete('/:id', (req, res) => {
+Router.delete('/:id', (req, res, next) => {
     const { id } = req.params;
-    console.log("DELETED")
-    let aproject = project.filter(element => element.id != id)
+    let err = 0;
+    console.log("DELETED");
     for (let i = 0; i < project.length; i++) {
-        project.pop();
+        if (project[i].id == id) {
+            err = 1;
+            let aproject = project.filter(element => element.id != id);
+            for (let i = 0; i < project.length; i++) {
+                project.pop();
+            }
+            Object.assign(project, aproject);
+            res.send(project);
+        }
+
     }
-    Object.assign(project, aproject)
-    res.send(project)
+    if (err == 1) {
+        return;
+    }
+    else {
+        const error = new Error("No ID Match")
+        error.status = 404;
+        next(error);
+    }
+
 })
 
 // Update method to update Project attributes
