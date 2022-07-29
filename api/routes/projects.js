@@ -3,7 +3,7 @@ const express = require('express')
 const Router = express.Router()
 
 
-//hard coded placeholder project object information
+// Hard coded placeholder project object information
 const project1 = new Project(1, "project1", "Clint", "Cass",
     "https://github.com/NilK15/projectmanagement-backend", ["javascript",
     "nodejs", "react"], "Project applicatiooone")
@@ -48,7 +48,11 @@ Router.put('/:id', (req, res) => {
     project.forEach(element => {
         if (element.id == id) {
             const newElement = { ...element, ...body }
-            //This is changing the actual value of the current elemnt as opposed to using element = req.body, which was more of a reference. Can also use element dot notation such as element.author to change the value which will change at memory loaction also similarly to Object.assign()
+            //This is changing the actual value of the current elemnt as
+            //opposed to using element = req.body, which was more of a
+            //reference. Can also use element dot notation such as
+            //element.author to change the value which will change at memory
+            //loaction also similarly to Object.assign()
             Object.assign(element, newElement)
             res.send(`Updated Project Id: ${id} \n Author Updated To: ${body.author}`);
         }

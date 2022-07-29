@@ -1,4 +1,3 @@
-
 const bodyParser = require('body-parser')
 const express = require('express')
 const projectRoutes = require('./api/routes/projects.js')
@@ -17,9 +16,26 @@ app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
-
 // Routes to projects.js domain
 app.use('/projects', projectRoutes);
+
+// If no routes match, then handles all other requests that make it this far - not found which is what server 404 message is for.
+app.use((req, res, next) => {
+    const error = new Error("Not Found");
+    error.status = 404;
+    next(error);
+})
+
+// Handles forwarded error messages
+app.use((error, req, res, next) => {
+    res.status(error.status || 500);
+    res.json({
+        error: {
+            message: error.message
+        }
+    })
+})
+
 
 
 // Starts server to listen for requests
