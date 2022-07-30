@@ -18,45 +18,27 @@ const project = []
 
 // Error handler function
 // msg = "project array does not exist" default assignment not working
-function errorHandler(req, res, msg, status, post = false) {
+function errorHandler(res, msg = "whoops", status, post = false) {
     let newMsg = msg;
     if (typeof project === 'undefined') {
         newMsg = "The Project Array Does Not Exist"
         let error = new Error(newMsg);
-        res.status(status).json({
+        res.status = status;
+        res.json({
             error: error.message
         })
+        next(error);
     }
     else if (project[0] == null && post == false) {
-        if (req.method == "delete") {
-            let error = new Error(newMsg);
-            res.status(status).json({
+        newMsg = msg;
+        let error = new Error(newMsg);
+        res.status = status;
+        res.json({
+            message: {
                 error: error.message
-            })
-        }
-        else {
-            let error = new Error(newMsg);
-            // res.status = status;
-            res.status(status).json({
-                message: {
-                    error: error.message
-                }
-            })
-        }
-        // next(error);
-    }
-    else if (post == false) {
-        project.pop();
-        res.send(project);
-
-    }
-    else if (post == true) {
-        var body = req.body;
-        project.push(body);
-        res.send(project);
-    }
-    else {
-        res.send(project);
+            }
+        })
+        next(error);
     }
 }
 
@@ -65,23 +47,23 @@ function errorHandler(req, res, msg, status, post = false) {
 
 // These are endpoints - similar to little areas of information for people to retrieve information (like an API)
 Router.get('/', (req, res, next) => {
-    errorHandler(req, res, "No Projects Found", 404);
-    // res.send(project)
+    errorHandler(res, "No Projects Found", 404);
+    res.send(project)
 })
 
 Router.post('/', (req, res) => {
-    // var body = req.body;
-    errorHandler(req, res, "No Project Array to Store Project", 404, true);
-    // project.push(body);
-    // res.send(project);
+    var body = req.body;
+    errorHandler(res, "No Project Array to Store Project", 404, true);
+    project.push(body);
+    res.send(project);
 })
 
 // Deletes last entry
 Router.delete('/', (req, res, next) => {
 
-    errorHandler(req, res, "No Projects to Delete", 404)
-    // project.pop();
-    // res.send(project);
+    errorHandler(res, "No Projects to Delete", 404)
+    project.pop();
+    res.send(project);
 })
 
 Router.delete('/:id', (req, res, next) => {
@@ -97,22 +79,27 @@ Router.delete('/:id', (req, res, next) => {
             Object.assign(project, aproject);
             res.send(project);
         }
+
     }
     if (idExists) {
         return;
     }
     else {
-        errorHandler(req, res, "Project with the ID " + id + " does not exist", 404);
+        errorHandler(res, "Project with the ID " + id + " does not exist", 404);
     }
 
 })
 
 // Update method to update Project attributes
-Router.put('/:id', (req, res) => {
+Router.put('/:id', (req, res, next) => {
     // grabs and sets id/author as variable
     const { id } = req.params;
     const body = req.body;
-    errorHandler(res, "No Project to Update", 404)
+    if (!project || project[0] == null) {
+        const error = new Error("No Project to Update");
+        error.status = 404;
+        next(error);
+    }
     project.forEach(element => {
         if (element.id == id) {
             const newElement = { ...element, ...body }
@@ -127,6 +114,13 @@ Router.put('/:id', (req, res) => {
             // ${body.author}`);
         }
     });
-    errorHandler(req, res, "No Project ID Match to Update", 404);
+
+    const error = new Error("No Project ID Match to Update");
+    error.status = 404;
+    next(error);
 })
+
 module.exports = Router;
+
+
+
