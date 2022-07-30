@@ -1,33 +1,9 @@
 const Project = require('../models/project.models.js')
 const express = require('express')
 const Router = express.Router()
-
+const sqlite3 = require('sqlite3').verbose()
 
 const project = []
-
-// Error handler function
-// msg = "project array does not exist" default assignment not working
-function errorHandler(res, msg, status, post = false) {
-    let newMsg = msg;
-    if (typeof project === 'undefined') {
-        newMsg = "The project array does not exist"
-        let error = new Error(newMsg);
-        res.status = status;
-        res.json({
-            error: error.message
-        })
-    }
-    else if (project[0] == null && post == false) {
-        newMsg = msg;
-        let error = new Error(newMsg);
-        res.status = status;
-        res.json({
-            message: {
-                error: error.message
-            }
-        })
-    }
-}
 
 // This is a server, handling requests and based on those request message, we send certain data matching the data request
 // Think of creating api requests - similar to twitter getting data requests like tweets.
@@ -115,7 +91,6 @@ Router.delete('/:id', (req, res) => {
             error: error.message
         })
     }
-
 })
 
 // Update method to update Project attributes
