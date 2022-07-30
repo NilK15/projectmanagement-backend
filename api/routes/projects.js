@@ -123,29 +123,43 @@ Router.put('/:id', (req, res, next) => {
     // grabs and sets id/author as variable
     const { id } = req.params;
     const body = req.body;
-    if (!project || project[0] == null) {
-        const error = new Error("No project to update");
-        error.status = 404;
-        next(error);
+    let idExists = false;
+    if (typeof project === 'undefined') {
+        let error = new Error("The project array does not exist.");
+        res.status = 404;
+        res.json({
+            error: error.message
+        })
     }
-    project.forEach(element => {
-        if (element.id == id) {
-            const newElement = { ...element, ...body }
-            //This is changing the actual value of the current elemnt as
-            //opposed to using element = req.body, which was more of a
-            //reference. Can also use element dot notation such as
-            //element.author to change the value which will change at
-            //memory loaction also similarly to Object.assign()
-            Object.assign(element, newElement)
-            res.send(newElement);
-            // res.send(`Updated Project Id: ${id} \n Author Updated To:
-            // ${body.author}`);
+    else if (project.length == 0) {
+        let error = new Error("There are no existing projects to update.");
+        res.status = 404;
+        res.json({
+            error: error.message
+        })
+    }
+    else {
+        project.forEach(element => {
+            if (element.id == id) {
+                idExists = true;
+                const newElement = { ...element, ...body }
+                //This is changing the actual value of the current elemnt as
+                //opposed to using element = req.body, which was more of a
+                //reference. Can also use element dot notation such as
+                //element.author to change the value which will change at
+                //memory loaction also similarly to Object.assign()
+                Object.assign(element, newElement)
+                res.send(newElement);
+            }
+        });
+        if (idExists == false) {
+            let error = new Error("The project with ID " + id + " does not exist.");
+            res.status = 404;
+            res.json({
+                error: error.message
+            })
         }
-    });
-
-    const error = new Error("No project ID to match update");
-    error.status = 404;
-    next(error);
+    }
 })
 
 module.exports = Router;
