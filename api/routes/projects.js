@@ -3,31 +3,19 @@ const express = require('express')
 const Router = express.Router()
 
 
-// Hard coded placeholder project object information
-// const project1 = new Project(1, "project1", "Clint", "Cass",
-//     "https://github.com/NilK15/projectmanagement-backend", ["javascript",
-//     "nodejs", "react"], "Project applicatiooone")
-// const project2 = new Project(2, "project2", "Nil", "Chris",
-//     "https://github.com/NilK15/projectmanagement-backend", ["javascript",
-//     "nodejs", "react"], "Project applicatiooone")
-// const project3 = new Project(3, "project3", "Nil", "Clint", "www.yahoo.com",
-//     "string", "description")
-// const project = [project1, project2, project3]
 const project = []
-
 
 // Error handler function
 // msg = "project array does not exist" default assignment not working
-function errorHandler(res, msg = "whoops", status, post = false) {
+function errorHandler(res, msg, status, post = false) {
     let newMsg = msg;
     if (typeof project === 'undefined') {
-        newMsg = "The Project Array Does Not Exist"
+        newMsg = "The project array does not exist"
         let error = new Error(newMsg);
         res.status = status;
         res.json({
             error: error.message
         })
-        next(error);
     }
     else if (project[0] == null && post == false) {
         newMsg = msg;
@@ -38,7 +26,6 @@ function errorHandler(res, msg = "whoops", status, post = false) {
                 error: error.message
             }
         })
-        next(error);
     }
 }
 
@@ -46,27 +33,68 @@ function errorHandler(res, msg = "whoops", status, post = false) {
 // Think of creating api requests - similar to twitter getting data requests like tweets.
 
 // These are endpoints - similar to little areas of information for people to retrieve information (like an API)
-Router.get('/', (req, res, next) => {
-    errorHandler(res, "No Projects Found", 404);
-    res.send(project)
+Router.get('/', (req, res) => {
+    if (typeof project === 'undefined') {
+        let error = new Error("The project array does not exist");
+        res.status = 404;
+        res.json({
+            error: error.message
+        })
+    }
+    else if (project.length == 0) {
+        let error = new Error("No existing projects to receive");
+        res.status = 404;
+        res.json({
+            message: {
+                error: error.message
+            }
+        })
+    }
+    else {
+        res.send(project)
+    }
 })
 
 Router.post('/', (req, res) => {
-    var body = req.body;
-    errorHandler(res, "No Project Array to Store Project", 404, true);
-    project.push(body);
-    res.send(project);
+    if (typeof project === 'undefined') {
+        let error = new Error("The project array does not exist");
+        res.status = 404;
+        res.json({
+            error: error.message
+        })
+    }
+    else {
+        let body = req.body;
+        project.push(body);
+        res.send(project);
+    }
 })
 
 // Deletes last entry
-Router.delete('/', (req, res, next) => {
+Router.delete('/', (req, res) => {
+    //No Projects to Delete
+    if (typeof project === 'undefined') {
+        let error = new Error("The project array does not exist.");
+        res.status = 404;
+        res.json({
+            error: error.message
+        })
+    }
+    else if (project.length == 0) {
+        let error = new Error("There are no projects to delete.");
+        res.status = 404;
+        res.json({
+            error: error.message
 
-    errorHandler(res, "No Projects to Delete", 404)
-    project.pop();
-    res.send(project);
+        })
+    }
+    else {
+        project.pop();
+        res.send(project);
+    }
 })
 
-Router.delete('/:id', (req, res, next) => {
+Router.delete('/:id', (req, res) => {
     const { id } = req.params;
     let idExists = false;
     for (let i = 0; i < project.length; i++) {
@@ -79,13 +107,13 @@ Router.delete('/:id', (req, res, next) => {
             Object.assign(project, aproject);
             res.send(project);
         }
-
     }
-    if (idExists) {
-        return;
-    }
-    else {
-        errorHandler(res, "Project with the ID " + id + " does not exist", 404);
+    if (idExists == false) {
+        let error = new Error("The project with ID " + id + " does not exist.");
+        res.status = 404;
+        res.json({
+            error: error.message
+        })
     }
 
 })
@@ -96,7 +124,7 @@ Router.put('/:id', (req, res, next) => {
     const { id } = req.params;
     const body = req.body;
     if (!project || project[0] == null) {
-        const error = new Error("No Project to Update");
+        const error = new Error("No project to update");
         error.status = 404;
         next(error);
     }
@@ -115,7 +143,7 @@ Router.put('/:id', (req, res, next) => {
         }
     });
 
-    const error = new Error("No Project ID Match to Update");
+    const error = new Error("No project ID to match update");
     error.status = 404;
     next(error);
 })
