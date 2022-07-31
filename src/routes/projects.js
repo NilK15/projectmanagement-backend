@@ -16,28 +16,12 @@ const db = new sqlite3.Database("./database/test.db", sqlite3.OPEN_READWRITE, (e
 
 
 // These are endpoints - similar to little areas of information for people to retrieve information (like an API)
-Router.get('/', (req, res) => {
-    if (typeof project === 'undefined') {
-        let error = new Error("The project array does not exist");
-        res.status = 404;
-        res.json({
-            error: error.message
-        })
-    }
-    // else if (project.length == 0) {
-    //     let error = new Error("No existing projects to receive");
-    //     res.status = 404;
-    //     res.json({
-    //         message: {
-    //             error: error.message
-    //         }
-    //     })
-    // }
-    else {
+Router.get('/', (req, res, next) => {
+    try {
         let stmt = "SELECT * FROM Project";
         let projectsArray = [];
         db.all(stmt, [], (err, rows) => {
-            if (err) return console.error(err.message);
+            if (err) throw new Error(err.message);
             rows.forEach((row) => {
                 console.log(row);
                 // res.send(row);
@@ -47,6 +31,10 @@ Router.get('/', (req, res) => {
         });
         // db.close();
         // res.send(project)
+
+    } catch (error) {
+        console.log(error.message)
+        next(error);
     }
 })
 
