@@ -9,7 +9,7 @@ const sqlite3 = require('sqlite3').verbose()
 const app = express()
 const port = 3000
 
-//new connectino to existing database, maybe
+//new connection to existing database, maybe
 const db = new sqlite3.Database("./database/test.db");
 
 db.serialize(() => {
@@ -19,21 +19,19 @@ db.serialize(() => {
     //     stmt.run("Project" + i);
     // }
     // stmt.finalize();
-
     const tableArray = [ProjectTable]
-
     tableArray.forEach((table) => db.run(table.TableQuery))
-
     // db.run("SELECT * FROM Project", (err, row) => {
     //     console.log(row.value);s
     // });
-
     db.each("SELECT projectName AS id, projectName FROM Project", (err, row) => {
         console.log(row.id + ": " + row.projectName);
     });
 
 });
-app.db = db;
+
+db.close();
+
 //Morgan allows to log something while request continues to move on (check
 //console) 'dev' is the form of the output
 app.use(morgan('dev'))
