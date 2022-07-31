@@ -3,29 +3,14 @@ const express = require('express')
 const projectRoutes = require('./src/routes/projects.js')
 const ProjectTable = require('./src/models/project.table.js')
 const morgan = require('morgan')
-const sqlite3 = require('sqlite3').verbose()
+const db = require('./services/db.js')
 
 // Express instance
 const app = express()
 const port = 3000
 
-
-// ------ Database Connection ------ /.
-
-// new connection to existing database with read/write functionality
-const db = new sqlite3.Database("./database/test.db", sqlite3.OPEN_READWRITE, (err) => {
-    if (err) return console.error(err.message);
-});
-
-// sql statement to create Project table
-let createProjectTable = 'CREATE TABLE IF NOT EXISTS Project(id INTEGER PRIMARY KEY, projectName, manager, author, gitUrl, projectStack, description)';
-
-//creates project table 
-db.run(createProjectTable);
-
-// db.close();
-
-// -------------------------------- / 
+// creates project table
+db.run(ProjectTable.TableQuery);
 
 //Morgan allows to log something while request continues to move on (check
 //console) 'dev' is the form of the output

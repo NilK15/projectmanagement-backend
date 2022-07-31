@@ -1,4 +1,4 @@
 class ProjectTable {
-    static TableQuery = "CREATE TABLE IF NOT EXISTS Project (projectID ROWID, projectName TEXT, manager TEXT, author TEXT, gitUrl TEXT, projectStack  TEXT, description TEXT)"
+    static TableQuery = 'CREATE TABLE IF NOT EXISTS Project(id INTEGER PRIMARY KEY, projectName, manager, author, gitUrl, projectStack, description)';
 }
 module.exports = ProjectTable;
