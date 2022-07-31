@@ -9,28 +9,23 @@ const sqlite3 = require('sqlite3').verbose()
 const app = express()
 const port = 3000
 
-//new connection to existing database, maybe
-const db = new sqlite3.Database("./database/test.db");
 
-db.serialize(() => {
-    // db.run("CREATE TABLE IF NOT EXISTS Project (projectName TEXT)");
-    // const stmt = db.prepare("INSERT INTO Project VALUES (?)");
-    // for (let i = 0; i < 10; i++) {
-    //     stmt.run("Project" + i);
-    // }
-    // stmt.finalize();
-    const tableArray = [ProjectTable]
-    tableArray.forEach((table) => db.run(table.TableQuery))
-    // db.run("SELECT * FROM Project", (err, row) => {
-    //     console.log(row.value);s
-    // });
-    db.each("SELECT projectName AS id, projectName FROM Project", (err, row) => {
-        console.log(row.id + ": " + row.projectName);
-    });
+// ------ Database Connection ------ /.
 
+// new connection to existing database with read/write functionality
+const db = new sqlite3.Database("./database/test.db", sqlite3.OPEN_READWRITE, (err) => {
+    if (err) return console.error(err.message);
 });
 
-db.close();
+// sql statement to create Project table
+let createProjectTable = 'CREATE TABLE IF NOT EXISTS Project(id INTEGER PRIMARY KEY, projectName, manager, author, gitUrl, projectStack, description)';
+
+//creates project table 
+db.run(createProjectTable);
+
+// db.close();
+
+// -------------------------------- / 
 
 //Morgan allows to log something while request continues to move on (check
 //console) 'dev' is the form of the output
