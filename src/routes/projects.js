@@ -61,7 +61,7 @@ Router.delete('/:id', (req, res) => {
         });
         res.send("Deleted project with id " + id + " from the project table");
     } catch (error) {
-        consle.log(error.message)
+        console.log(error.message)
         next(error);
     }
 })
@@ -77,7 +77,7 @@ Router.put('/:id', (req, res) => {
         });
         res.send("Updated project " + id + "'s details");
     } catch (error) {
-        consle.log(error.message)
+        console.log(error.message)
         next(error);
     }
 })
