@@ -1,4 +1,4 @@
-// SQLlite database connection used for this project
+// SQLite database connection used for this project
 const sqlite3 = require('sqlite3').verbose();
 
 // Connecting to SQLite3 database file

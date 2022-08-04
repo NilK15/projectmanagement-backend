@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Routes to projects.js domain
-app.use('/projects', projectRoutes);
+app.use('/api/projects', projectRoutes);
 
 // If no routes match, then handles all other requests that make it this far - not found which is what server 404 message is for.
 app.use((req, res, next) => {
